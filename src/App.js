@@ -43,7 +43,7 @@ function App() {
     } = person;
 
     const newPerson = {
-      name: `${first}${last}`,
+      name: `${first} ${last}`,
       email,
       phone,
       age,
@@ -63,8 +63,11 @@ function App() {
   }, []);
 
   const handleValue = (e) => {
-    e.preventDefault();
-    console.log(e.target);
+    if (e.target.classList.contains("icon")) {
+      const newValue = e.target.dataset.label;
+      setTitle(newValue);
+      setValue(person[newValue]);
+    }
   };
 
   return (
@@ -83,42 +86,38 @@ function App() {
             <button
               className="icon"
               data-label="name"
-              onMouseOver={(e) => handleValue(e)}
+              onMouseOver={handleValue}
             >
               <FaUser />
             </button>
             <button
               className="icon"
               data-label="email"
-              onMouseOver={() => handleValue()}
+              onMouseOver={handleValue}
             >
               <FaEnvelopeOpen />
             </button>
-            <button
-              className="icon"
-              data-label="age"
-              onMouseOver={(e) => handleValue(e)}
-            >
+            <button className="icon" data-label="age" onMouseOver={handleValue}>
               <FaCalendarTimes />
             </button>
             <button
               className="icon"
               data-label="street"
-              onMouseOver={(e) => handleValue(e)}
+              onMouseOver={handleValue}
             >
               <FaMap />
             </button>
             <button
               className="icon"
               data-label="phone"
-              onMouseOver={(e) => handleValue(e)}
+              onMouseOver={handleValue}
             >
               <FaPhone />
             </button>
             <button
               className="icon"
               data-label="password"
-              onMouseOver={(e) => handleValue(e)}
+              onMouseOver={handleValue}
             >
               <FaLock />
             </button>
