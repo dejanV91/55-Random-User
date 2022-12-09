@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
   FaEnvelopeOpen,
   FaUser,
@@ -9,13 +10,60 @@ import {
 } from "react-icons/fa";
 const url = "https://randomuser.me/api/";
 const defaultImage = "https://randomuser.me/api/portraits/men/75.jpg";
+
 function App() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [person, setPerson] = useState(null);
   const [title, setTitle] = useState("name");
   const [value, setValue] = useState("random user");
 
+  const getPerson = async () => {
+    const response = await fetch(url);
+    const data = await response.json();
+    const person = data.results[0];
+
+    const { large: image } = person.picture;
+
+    const {
+      name: { first, last },
+    } = person;
+
+    const { email, phone } = person;
+
+    const {
+      dob: { age },
+    } = person;
+
+    const {
+      street: { name, number },
+    } = person.location;
+
+    const {
+      login: { password },
+    } = person;
+
+    const newPerson = {
+      name: `${first}${last}`,
+      email,
+      phone,
+      age,
+      street: `${name} ${number}`,
+      password,
+      image,
+    };
+
+    setPerson(newPerson);
+    setLoading(false);
+    setTitle("name");
+    setValue(newPerson.name);
+  };
+
+  useEffect(() => {
+    getPerson();
+  }, []);
+
   const handleValue = (e) => {
+    e.preventDefault();
     console.log(e.target);
   };
 
@@ -42,7 +90,7 @@ function App() {
             <button
               className="icon"
               data-label="email"
-              onMouseOver={(e) => handleValue(e)}
+              onMouseOver={() => handleValue()}
             >
               <FaEnvelopeOpen />
             </button>
@@ -75,7 +123,7 @@ function App() {
               <FaLock />
             </button>
           </div>
-          <button className="btn" type="button">
+          <button className="btn" type="button" onClick={() => getPerson()}>
             {loading ? "Loading..." : "random user"}
           </button>
         </div>
